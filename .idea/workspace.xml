@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="063f94ff-2767-4ec0-ad1a-06a1bc636dc3" name="Changes" comment="" />
+    <list default="true" id="063f94ff-2767-4ec0-ad1a-06a1bc636dc3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/quiz-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz-service/src/main/java/com/devansh/quizservice/controller/QuizController.java" beforeDir="false" afterPath="$PROJECT_DIR$/quiz-service/src/main/java/com/devansh/quizservice/controller/QuizController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz-service/src/main/java/com/devansh/quizservice/service/QuizService.java" beforeDir="false" afterPath="$PROJECT_DIR$/quiz-service/src/main/java/com/devansh/quizservice/service/QuizService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/quiz-service/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

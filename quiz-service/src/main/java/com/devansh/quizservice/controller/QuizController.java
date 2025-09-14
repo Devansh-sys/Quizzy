@@ -32,6 +32,15 @@ public class QuizController {
         return quizService.calculateResult(id, responses);
     }
 
+    @PostMapping("generate-with-ai")
+    public ResponseEntity<String> createQuizWithAI(@RequestBody AIGenerateQuizRequest request) {
+        return quizService.createQuizWithAI(request);
+    }
+
+
+
+
+
 
 }
 
