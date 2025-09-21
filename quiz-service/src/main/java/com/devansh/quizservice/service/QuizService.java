@@ -44,7 +44,8 @@ public class QuizService {
     private ObjectMapper objectMapper;
     
     @Autowired
-    private QuizDao quizDao;
+    private RateLimiterService rateLimiterService;
+    
 
     public ResponseEntity<String> createQuiz(QuizDto quizDto, String authHeader) {
         try {

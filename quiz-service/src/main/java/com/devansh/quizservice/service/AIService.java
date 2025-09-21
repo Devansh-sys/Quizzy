@@ -1,11 +1,16 @@
 package com.devansh.quizservice.service;
 
+import com.devansh.quizservice.annotation.RateLimited;
+import com.devansh.quizservice.exception.RateLimitExceededException;
 import com.devansh.quizservice.model.Question;
 import com.google.cloud.aiplatform.v1beta1.*;
 import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +28,27 @@ public class AIService {
 
     @Value("${gemini.location:us-central1}")
     private String location;
+    
+    private final RateLimiterService rateLimiterService;
+    
+    @Autowired
+    public AIService(RateLimiterService rateLimiterService) {
+        this.rateLimiterService = rateLimiterService;
+    }
 
-    public List<Question> generateQuestions(String category, String difficulty, String roleType, int yearsOfExp, int count) throws IOException {
+    @RateLimited
+    public List<Question> generateQuestions(String category, String difficulty, String roleType, int yearsOfExp, int count, String authHeader) throws IOException {
+        // Extract user ID from auth header (in a real app, decode JWT properly)
+        Long userId = extractUserIdFromAuthHeader(authHeader);
+        
+        // Check rate limit
+        if (!rateLimiterService.isAllowed(userId)) {
+            long retryAfter = rateLimiterService.getTimeUntilReset(userId);
+            throw new RateLimitExceededException(
+                String.format("Rate limit exceeded. Try again in %d seconds.", retryAfter),
+                retryAfter
+            );
+        }
         String prompt = String.format("""
             Generate %d multiple-choice questions about %s for a %s with %d years of experience.
             Difficulty level: %s
@@ -108,5 +132,21 @@ public class AIService {
         // This is a placeholder - implement actual JSON parsing based on your Question class structure
         // For now, returning empty list as we'll implement this properly in the next step
         return questions;
+    }
+    
+    private Long extractUserIdFromAuthHeader(String authHeader) {
+        try {
+            // This is a simplified example - in a real app, extract user ID from JWT
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+                // In a real app, decode the JWT to get the user ID
+                // For now, return a default user ID (1) for testing
+                return 1L;
+            }
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization token");
+        }
+    }
     }
 }
